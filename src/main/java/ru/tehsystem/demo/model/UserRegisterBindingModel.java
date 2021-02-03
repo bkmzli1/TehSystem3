@@ -27,11 +27,13 @@ public class UserRegisterBindingModel {
     private String img;
     private String imgFon;
 
+
     private boolean admin;
     private boolean executor;
     private String firstName;
     private String lastName;
     private String middleName;
+    private String oldPassword;
 
     public String getUsername() {
         return username;
@@ -119,5 +121,15 @@ public class UserRegisterBindingModel {
 
     public void setImgFon(String imgFon) {
         this.imgFon = imgFon;
+    }
+
+
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 }

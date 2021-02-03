@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             fileUploadPath.mkdir();
         }
         registry.addResourceHandler("/static/**")
-                .addResourceLocations("file://" + fileUploadPath.getAbsolutePath() + "/");
+                .addResourceLocations("file:///" + fileUploadPath.getAbsolutePath() + "/");
         System.out.println("file://" + fileUploadPath.getAbsolutePath() + "/");
         registry.addResourceHandler("/templates/**")
                 .addResourceLocations("classpath:/templates/");

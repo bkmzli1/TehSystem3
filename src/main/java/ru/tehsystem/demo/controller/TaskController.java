@@ -44,10 +44,24 @@ public class TaskController {
         return taskService.taskCrate(taskCreate, (User) authentication.getPrincipal());
     }
 
+    @PostMapping("/bin/ex/{id}")
+    @ResponseBody
+    public boolean ex(Authentication authentication, @PathVariable String id) {
+        User user = (User) authentication.getPrincipal();
+        Task task = taskRepo.findById(id).get();
+        if (user.equals(task.getExecutor())){
+            return true;
+        }
+        AtomicBoolean b = new AtomicBoolean(false);
+        user.getAuthorities().forEach(roles -> b.set(roles.getAuthority().equals("ADMIN")));
+        return b.get();
+    }
+
     @GetMapping("/tasks")
     @ResponseBody
     public Set<Task> tasks(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+       User user = (User) authentication.getPrincipal();
+
         User userAllEx = userRepo.findOneByUsername("Все исполнители");
 
         AtomicBoolean root = new AtomicBoolean(false);

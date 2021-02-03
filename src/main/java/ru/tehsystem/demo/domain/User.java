@@ -18,6 +18,7 @@ public class User implements UserDetails {
     private String lastName;
     private String middleName;
     private String telephone;
+
     private String ps;
     private Img img;
     private Img imgFon;
@@ -194,4 +195,5 @@ public class User implements UserDetails {
     public void setPs(String ps) {
         this.ps = ps;
     }
+
 }

@@ -70,6 +70,7 @@ public class UserController {
         }
         return strings;
     }
+
     @GetMapping
     @RequestMapping("/user")
     public User user(Authentication authentication) {
@@ -92,20 +93,27 @@ public class UserController {
 
     @PostMapping("/save")
     @ResponseBody
-    public User userSave(@RequestBody() UserRegisterBindingModel userRegisterBindingModel, Authentication authentication) {
+    public User userSave(@RequestBody() UserRegisterBindingModel userRegisterBindingModel,
+                         Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        user.setFirstName(userRegisterBindingModel.getFirstName());
-        user.setMiddleName(userRegisterBindingModel.getMiddleName());
-        user.setLastName(userRegisterBindingModel.getLastName());
-        userRepository.save(user);
+        System.out
+                .println(bCryptPasswordEncoder.matches(userRegisterBindingModel.getOldPassword(), user.getPassword()));
+        ;
+        if (bCryptPasswordEncoder.matches(userRegisterBindingModel.getOldPassword(), user.getPassword())) {
+            user.setFirstName(userRegisterBindingModel.getFirstName());
+            user.setMiddleName(userRegisterBindingModel.getMiddleName());
+            user.setLastName(userRegisterBindingModel.getLastName());
+            user.setPassword(bCryptPasswordEncoder.encode(userRegisterBindingModel.getPassword()));
+            userRepository.save(user);
+        }
         return user;
     }
-    @GetMapping("/usEx")
-    public List<User> userEx(){
-        List<User> userByRole = userRepository.findUsersByAuthoritiesAuthority(Role.EXECUTOR);
-        return userByRole ;
-    }
 
+    @GetMapping("/usEx")
+    public List<User> userEx() {
+        List<User> userByRole = userRepository.findUsersByAuthoritiesAuthority(Role.EXECUTOR);
+        return userByRole;
+    }
 
 
 }
