@@ -1,14 +1,12 @@
 package ru.tehsystem.demo.model.validations;
 
 
-
-
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class IsPasswordMatchingValidator implements ConstraintValidator<IsPasswordMatching,Object> {
+public class IsPasswordMatchingValidator implements ConstraintValidator<IsPasswordMatching, Object> {
     @Override
     public void initialize(IsPasswordMatching isPasswordMatching) {
 
@@ -16,9 +14,14 @@ public class IsPasswordMatchingValidator implements ConstraintValidator<IsPasswo
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
-        if (object instanceof UserRegisterBindingModel){
+        if (object instanceof UserRegisterBindingModel) {
             UserRegisterBindingModel userModel = (UserRegisterBindingModel) object;
-            return userModel.getPassword().equals(userModel.getConfirmPassword());
+            try {
+                return userModel.getPassword().equals(userModel.getConfirmPassword());
+            }catch (NullPointerException npe){
+                return false;
+            }
+
         }
         return false;
     }

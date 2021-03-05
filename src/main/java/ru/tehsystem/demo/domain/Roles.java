@@ -3,7 +3,6 @@ package ru.tehsystem.demo.domain;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
-import ru.tehsystem.demo.domain.enums.Role;
 
 import javax.persistence.*;
 
@@ -18,9 +17,7 @@ public class Roles implements GrantedAuthority {
     )
     private String id;
     @Column(unique = true)
-    private Role authority;
-
-
+    private String authority;
 
 
     public String getId() {
@@ -33,10 +30,10 @@ public class Roles implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return authority.getRole();
+        return authority;
     }
 
-    public void setAuthority(Role authority) {
+    public void setAuthority(String authority) {
         this.authority = authority;
     }
 }

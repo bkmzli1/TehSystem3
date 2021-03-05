@@ -1,5 +1,6 @@
 package ru.tehsystem.demo.model;
 
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import ru.tehsystem.demo.model.validations.IsEmailRegistered;
 import ru.tehsystem.demo.model.validations.IsPasswordMatching;
 import ru.tehsystem.demo.model.validations.IsUsernameTaken;
@@ -8,20 +9,23 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@IsPasswordMatching
+@EnableWebMvc
+@IsPasswordMatching()
 public class UserRegisterBindingModel {
     @Size(min = 4, max = 20, message = "Имя пользователя должно быть от 4 до 20 символов")
     @IsUsernameTaken
+    @NotEmpty(message = "Укажите логин")
     private String username;
 
     @Size(min = 4, max = 30, message = "Пароль должно быть от 4 до 30 символов")
+    @NotEmpty(message = "Введите пароль")
     private String password;
-
+    @NotEmpty(message = "Введите повторение пароля")
     private String confirmPassword;
 
     @NotEmpty(message = "Укажите почту")
     @Email(message = "Неправильная почта")
-    @IsEmailRegistered
+    @IsEmailRegistered(message = "Почта уже зарегистрирована")
     private String email;
 
     private String img;
@@ -30,8 +34,11 @@ public class UserRegisterBindingModel {
 
     private boolean admin;
     private boolean executor;
+    @NotEmpty(message = "Укажите ФИО")
     private String firstName;
+    @NotEmpty(message = "Укажите ФИО")
     private String lastName;
+    @NotEmpty(message = "Укажите ФИО")
     private String middleName;
     private String oldPassword;
 
@@ -75,6 +82,14 @@ public class UserRegisterBindingModel {
         this.img = img;
     }
 
+    public String getImgFon() {
+        return imgFon;
+    }
+
+    public void setImgFon(String imgFon) {
+        this.imgFon = imgFon;
+    }
+
     public boolean isAdmin() {
         return admin;
     }
@@ -115,16 +130,6 @@ public class UserRegisterBindingModel {
         this.middleName = middleName;
     }
 
-    public String getImgFon() {
-        return imgFon;
-    }
-
-    public void setImgFon(String imgFon) {
-        this.imgFon = imgFon;
-    }
-
-
-
     public String getOldPassword() {
         return oldPassword;
     }
@@ -133,3 +138,19 @@ public class UserRegisterBindingModel {
         this.oldPassword = oldPassword;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

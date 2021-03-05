@@ -1,12 +1,15 @@
 package ru.tehsystem.demo.model.validations;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.tehsystem.demo.services.impl.UserService;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class IsUsernameTakenValidator implements ConstraintValidator<IsUsernameTaken,String> {
+
+public class IsUsernameTakenValidator implements ConstraintValidator<IsUsernameTaken, String> {
     @Autowired
     private UserService userService;
 
@@ -15,8 +18,9 @@ public class IsUsernameTakenValidator implements ConstraintValidator<IsUsernameT
 
     }
 
-    @Override
-    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return !this.userService.isUsernameTaken(s);
+    @Override public boolean isValid(String value, ConstraintValidatorContext context) {
+
+        return !this.userService.isUsernameTaken(value);
     }
+
 }

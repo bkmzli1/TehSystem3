@@ -4,7 +4,6 @@ package ru.tehsystem.demo.services.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tehsystem.demo.domain.enums.Role;
 import ru.tehsystem.demo.domain.Roles;
 import ru.tehsystem.demo.model.RoleServiceModel;
 import ru.tehsystem.demo.repo.RoleRepo;
@@ -23,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleServiceModel findByAuthority(Role authority) {
+    public RoleServiceModel findByAuthority(String authority) {
         Roles roles = this.roleRepository.findByAuthority(authority);
         RoleServiceModel roleModel = null;
         if (roles != null) {

@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.tehsystem.demo.domain.User;
-import ru.tehsystem.demo.domain.enums.Role;
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 import ru.tehsystem.demo.repo.ImgRepo;
 import ru.tehsystem.demo.repo.UserRepo;
@@ -43,24 +42,14 @@ public class UserController {
 
     @PostMapping(value = "/reg")
     @ResponseBody
-    public Map<String, String> registerConfirm(@RequestBody() @Valid UserRegisterBindingModel userRegisterBindingModel,
-                                               BindingResult bindingResult,
-                                               HttpServletRequest request) {
+    public Map<Object, Object> registerConfirm(@RequestBody @Valid UserRegisterBindingModel userRegisterBindingModel,
+                                               BindingResult bindingResult) {
 
-        Map<String, String> strings = new HashMap<>();
+        Map<Object, Object> strings = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            String errorS = "";
-            int size = 0;
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                errorS += error.getDefaultMessage();
-                size++;
-                if (size < bindingResult.getAllErrors().size()) {
-                    errorS += ",";
-                } else {
-                    errorS += ".";
-                }
-            }
-            strings.put("error", errorS);
+           Set<String> errors = new TreeSet<>();
+            bindingResult.getAllErrors().forEach(objectError -> errors.add(objectError.getDefaultMessage()));
+            strings.put("error", errors);
             return strings;
         } else {
             UserRegisterBindingModel userServiceModel = this.modelMapper
@@ -109,10 +98,12 @@ public class UserController {
         return user;
     }
 
-    @GetMapping("/usEx")
-    public List<User> userEx() {
-        List<User> userByRole = userRepository.findUsersByAuthoritiesAuthority(Role.EXECUTOR);
-        return userByRole;
+    @GetMapping("/executor")
+    public Set<User> userEx() {
+        Set<User> users = new TreeSet<User>(Comparator.comparing(User::getUsername));
+        List<User> userByRole = userRepository.findUsersByAuthoritiesAuthority("EXECUTOR");
+        users.addAll(userByRole);
+        return users;
     }
 
 

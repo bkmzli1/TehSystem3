@@ -8,7 +8,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import ru.tehsystem.demo.domain.enums.Role;
 import ru.tehsystem.demo.model.RoleServiceModel;
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 import ru.tehsystem.demo.services.impl.RoleService;
@@ -30,9 +29,9 @@ public class InitialDataLoader implements ApplicationRunner {
     }
 
     public void run(ApplicationArguments args) {
-        RoleServiceModel userRole = this.roleService.findByAuthority(Role.USER);
-        RoleServiceModel executorRole = this.roleService.findByAuthority(Role.EXECUTOR);
-        RoleServiceModel adminRole = this.roleService.findByAuthority(Role.ADMIN);
+        RoleServiceModel userRole = this.roleService.findByAuthority("USER");
+        RoleServiceModel executorRole = this.roleService.findByAuthority("EXECUTOR");
+        RoleServiceModel adminRole = this.roleService.findByAuthority("ADMIN");
 
         UserRegisterBindingModel userRoot = this.userService.findByUsername("root");
         UserRegisterBindingModel userExecutor = this.userService.findByUsername("Все исполнители");

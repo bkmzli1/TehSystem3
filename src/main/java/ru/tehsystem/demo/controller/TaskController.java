@@ -2,18 +2,20 @@ package ru.tehsystem.demo.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.tehsystem.demo.domain.Img;
 import ru.tehsystem.demo.domain.Massages;
 import ru.tehsystem.demo.domain.Task;
 import ru.tehsystem.demo.domain.User;
-import ru.tehsystem.demo.domain.enums.Role;
 import ru.tehsystem.demo.model.TaskCreate;
 import ru.tehsystem.demo.repo.TaskRepo;
 import ru.tehsystem.demo.repo.UserRepo;
 import ru.tehsystem.demo.services.impl.TaskService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,8 +42,22 @@ public class TaskController {
 
     @PostMapping("/create")
     @ResponseBody
-    public Task task(@RequestBody TaskCreate taskCreate, Authentication authentication) {
-        return taskService.taskCrate(taskCreate, (User) authentication.getPrincipal());
+    public Object task(@RequestBody() @Valid TaskCreate taskCreate, BindingResult bindingResult,
+                       HttpServletRequest request, Authentication authentication) {
+        Map<Object, Object> strings = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            Set<String> errors = new TreeSet<>();
+            bindingResult.getAllErrors().forEach(objectError -> errors.add(objectError.getDefaultMessage()));
+            strings.put("error", errors);
+            return strings;
+        } else {
+            try {
+                return taskService.taskCrate(taskCreate, (User) authentication.getPrincipal());
+            } catch (NullPointerException npe) {
+                return taskService.taskCrate(taskCreate, userRepo.findAll().get(0));
+            }
+        }
+
     }
 
     @PostMapping("/bin/ex/{id}")
@@ -49,7 +65,7 @@ public class TaskController {
     public boolean ex(Authentication authentication, @PathVariable String id) {
         User user = (User) authentication.getPrincipal();
         Task task = taskRepo.findById(id).get();
-        if (user.equals(task.getExecutor())){
+        if (user.equals(task.getExecutor())) {
             return true;
         }
         AtomicBoolean b = new AtomicBoolean(false);
@@ -60,24 +76,69 @@ public class TaskController {
     @GetMapping("/tasks")
     @ResponseBody
     public Set<Task> tasks(Authentication authentication) {
-       User user = (User) authentication.getPrincipal();
+        User user;
+        try {
+            user = (User) authentication.getPrincipal();
+        } catch (NullPointerException npe) {
+            user = userRepo.findAll().get(0);
+        }
 
         User userAllEx = userRepo.findOneByUsername("Все исполнители");
 
         AtomicBoolean root = new AtomicBoolean(false);
-        user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals(Role.ADMIN.getRole())).forEach(roles -> root.set(true));
+        user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals("ADMIN"))
+            .forEach(roles -> root.set(true));
         if (root.get()) {
             Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
             tasks.addAll(taskRepo.findAll());
+
+            tasks.removeIf(Task::isDoneCrate);
             return tasks;
         } else {
             List<Task> taskList = new ArrayList<>(taskRepo.findByCreator(user));
             taskList.addAll(taskRepo.findByExecutor(user));
             AtomicBoolean Ex = new AtomicBoolean(false);
-            user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals(Role.EXECUTOR.getRole())).forEach(roles -> Ex.set(true));
+            user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals("EXECUTOR"))
+                .forEach(roles -> Ex.set(true));
             if (Ex.get())
                 taskList.addAll(taskRepo.findByExecutor(userAllEx));
             Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
+            tasks.removeIf(Task::isDoneCrate);
+            tasks.addAll(taskList);
+            return tasks;
+        }
+    }
+    @GetMapping("/tasking")
+    @ResponseBody
+    public Set<Task> tasking(Authentication authentication) {
+        User user;
+        try {
+            user = (User) authentication.getPrincipal();
+        } catch (NullPointerException npe) {
+            user = userRepo.findAll().get(0);
+        }
+
+        User userAllEx = userRepo.findOneByUsername("Все исполнители");
+
+        AtomicBoolean root = new AtomicBoolean(false);
+        user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals("ADMIN"))
+            .forEach(roles -> root.set(true));
+        if (root.get()) {
+            Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
+            tasks.addAll(taskRepo.findAll());
+
+            tasks.removeIf(task -> !task.isDoneCrate());
+            return tasks;
+        } else {
+            List<Task> taskList = new ArrayList<>(taskRepo.findByCreator(user));
+            taskList.addAll(taskRepo.findByExecutor(user));
+            AtomicBoolean Ex = new AtomicBoolean(false);
+            user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals("EXECUTOR"))
+                .forEach(roles -> Ex.set(true));
+            if (Ex.get())
+                taskList.addAll(taskRepo.findByExecutor(userAllEx));
+            Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
+            tasks.removeIf(task -> !task.isDoneCrate());
             tasks.addAll(taskList);
             return tasks;
         }
@@ -95,7 +156,7 @@ public class TaskController {
 
     }
 
-    @GetMapping("/get/task/{id}")
+    @GetMapping("/get/{id}")
     @ResponseBody
     public Task task(@PathVariable String id) {
         Task task = taskRepo.findById(id).get();
@@ -111,6 +172,14 @@ public class TaskController {
         User user = (User) authentication.getPrincipal();
         Task task = taskRepo.findById(id).get();
         return this.taskService.taskFin(task, user);
+    }
+
+    @PostMapping("/binCrate/{id}")
+    @ResponseBody
+    public Task taskBinCrate(Authentication authentication, @PathVariable String id, @RequestBody boolean fin) {
+        User user = (User) authentication.getPrincipal();
+        Task task = taskRepo.findById(id).get();
+        return this.taskService.taskFinCrate(task, user, fin);
     }
 
     @GetMapping("/download/{id}")

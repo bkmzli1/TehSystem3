@@ -6,7 +6,6 @@ import ru.tehsystem.demo.domain.enums.Level;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -27,8 +26,8 @@ public class Task {
     private Set<Img> imgs;
     @ManyToOne
     private User creator;
-    @ManyToOne
-    private User executor;
+    @ManyToMany(fetch = FetchType.EAGER )
+    private Set<User> executor;
     @ManyToOne
     private User performed;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -40,6 +39,7 @@ public class Task {
     private LocalDateTime executed;
 
     private boolean done =false;
+    private boolean doneCrate =false;
 
 
     public String getId() {
@@ -83,15 +83,11 @@ public class Task {
         this.creator = creator;
     }
 
-    public User getExecutor() {
+    public Set<User> getExecutor() {
         return executor;
     }
 
-    public void setExecutor(Optional<User> executor) {
-        this.executor = executor.get();
-    }
-
-    public void setExecutor(User executor) {
+    public void setExecutor(Set<User> executor) {
         this.executor = executor;
     }
 
@@ -141,5 +137,13 @@ public class Task {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public boolean isDoneCrate() {
+        return doneCrate;
+    }
+
+    public void setDoneCrate(boolean doneCrate) {
+        this.doneCrate = doneCrate;
     }
 }

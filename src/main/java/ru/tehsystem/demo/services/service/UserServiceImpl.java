@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.tehsystem.demo.domain.Img;
-import ru.tehsystem.demo.domain.enums.Role;
 import ru.tehsystem.demo.domain.Roles;
 import ru.tehsystem.demo.domain.User;
 import ru.tehsystem.demo.model.RoleServiceModel;
@@ -78,19 +77,19 @@ public class UserServiceImpl implements UserService {
         Set<Roles> authorities = new HashSet<>();
         RoleServiceModel roleServiceModel = null;
 
-        roleServiceModel = this.roleService.findByAuthority(Role.USER);
+        roleServiceModel = this.roleService.findByAuthority("USER");
         Roles roles = this.modelMapper.map(roleServiceModel, Roles.class);
 
         authorities.add(roles);
 
         if (userServiceModel.isAdmin()) {
-            roleServiceModel = this.roleService.findByAuthority(Role.ADMIN);
+            roleServiceModel = this.roleService.findByAuthority("ADMIN");
             Roles rolesAdmin = this.modelMapper.map(roleServiceModel, Roles.class);
 
             authorities.add(rolesAdmin);
         }
         if (userServiceModel.isExecutor()) {
-            roleServiceModel = this.roleService.findByAuthority(Role.EXECUTOR);
+            roleServiceModel = this.roleService.findByAuthority("EXECUTOR");
             Roles rolesExecutor = this.modelMapper.map(roleServiceModel, Roles.class);
 
             authorities.add(rolesExecutor);

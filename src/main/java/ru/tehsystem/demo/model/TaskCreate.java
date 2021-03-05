@@ -2,20 +2,29 @@ package ru.tehsystem.demo.model;
 
 import ru.tehsystem.demo.domain.enums.Level;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
+
 public class TaskCreate {
-    Level level;
+    @NotEmpty(message = "Укажите тип заказа")
+    String level;
+    @Size(min = 4, max = 255, message = "название должно быть от 4 до 255 символов")
+    @NotEmpty(message = "Укажите название заказа")
     String name;
+    @Size(min = 4, max = 255, message = "текст должно быть от 4 до 255 символов")
+    @NotEmpty(message = "Укажите текст заказа")
     String text;
-    String executor;
+
+    Set<String> executor;
     Set<String> imgs;
 
-    public Level getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
@@ -27,11 +36,12 @@ public class TaskCreate {
         this.name = name;
     }
 
-    public String getExecutor() {
+
+    public Set<String> getExecutor() {
         return executor;
     }
 
-    public void setExecutor(String executor) {
+    public void setExecutor(Set<String> executor) {
         this.executor = executor;
     }
 

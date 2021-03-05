@@ -1,9 +1,11 @@
 package ru.tehsystem.demo.services.service;
 
+
 import org.springframework.stereotype.Service;
 import ru.tehsystem.demo.domain.Img;
 import ru.tehsystem.demo.domain.Task;
 import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.domain.enums.Level;
 import ru.tehsystem.demo.model.TaskCreate;
 import ru.tehsystem.demo.repo.ImgRepo;
 import ru.tehsystem.demo.repo.TaskRepo;
@@ -29,8 +31,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task taskCrate(TaskCreate taskCreate, User user) {
         Task task = new Task();
-        task.setExecutor(userRepo.findById(taskCreate.getExecutor()));
-        task.setLevel(taskCreate.getLevel());
+        task.setExecutor(new HashSet<>());
+        taskCreate.getExecutor().forEach(s -> {
+            User userById = userRepo.findUserById(s);
+            task.getExecutor().add(userById);
+        });
+        task.setLevel(Level.valueOf(taskCreate.getLevel()));
         task.setName(taskCreate.getName());
         task.setText(taskCreate.getText());
         task.setImgs(new HashSet<>());
@@ -43,7 +49,8 @@ public class TaskServiceImpl implements TaskService {
                 Img img = byId.get();
                 task.getImgs().add(img);
             });
-        }catch (NullPointerException nullPointerException){}
+        } catch (NullPointerException nullPointerException) {
+        }
 
         taskRepo.save(task);
         return task;
@@ -57,5 +64,18 @@ public class TaskServiceImpl implements TaskService {
         taskRepo.save(task);
         return task;
 
+    }
+
+    @Override public Task taskFinCrate(Task task, User user, boolean fin) {
+        if (fin){
+            task.setDoneCrate(true);
+
+        }else {
+            task.setDoneCrate(false);
+            task.setPerformed(null);
+            task.setDone(false);
+        }
+        taskRepo.save(task);
+        return task;
     }
 }

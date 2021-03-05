@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Configuration
+@EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${upload.path}")
     private String uploadPath;
@@ -25,7 +27,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         }
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("file:///" + fileUploadPath.getAbsolutePath() + "/");
-        System.out.println("file://" + fileUploadPath.getAbsolutePath() + "/");
+        System.out.println("file:///" + fileUploadPath.getAbsolutePath().replace("\\","/"));
         registry.addResourceHandler("/templates/**")
                 .addResourceLocations("classpath:/templates/");
 
@@ -39,6 +41,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         return requestedResource.exists() && requestedResource.isReadable() ? requestedResource : new ClassPathResource("/templates/index.html");
                     }
                 });
+
+ 
+
     }
 
 }
