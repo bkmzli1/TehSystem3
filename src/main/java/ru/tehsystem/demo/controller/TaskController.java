@@ -89,7 +89,7 @@ public class TaskController {
         user.getAuthorities().stream().filter(roles -> roles.getAuthority().equals("ADMIN"))
             .forEach(roles -> root.set(true));
         if (root.get()) {
-            Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
+            Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate).reversed());
             tasks.addAll(taskRepo.findAll());
 
             tasks.removeIf(Task::isDoneCrate);
@@ -102,7 +102,7 @@ public class TaskController {
                 .forEach(roles -> Ex.set(true));
             if (Ex.get())
                 taskList.addAll(taskRepo.findByExecutor(userAllEx));
-            Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
+            Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate).reversed());
             tasks.removeIf(Task::isDoneCrate);
             tasks.addAll(taskList);
             return tasks;

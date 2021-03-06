@@ -4,6 +4,7 @@ package ru.tehsystem.demo.controller;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -47,7 +48,7 @@ public class UserController {
 
         Map<Object, Object> strings = new HashMap<>();
         if (bindingResult.hasErrors()) {
-           Set<String> errors = new TreeSet<>();
+            Set<String> errors = new TreeSet<>();
             bindingResult.getAllErrors().forEach(objectError -> errors.add(objectError.getDefaultMessage()));
             strings.put("error", errors);
             return strings;
@@ -106,5 +107,9 @@ public class UserController {
         return users;
     }
 
+    @GetMapping("/usersss")
+    public Object user(@AuthenticationPrincipal User user) {
+        return user;
+    }
 
 }
