@@ -8,9 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import static java.lang.Math.*;
+
 @Entity
 @Table(name = "task")
 public class Task {
+
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -21,6 +24,9 @@ public class Task {
     private String id;
     private Level level;
     private String name;
+
+
+    @Column(length = 1256)
     private String text;
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Img> imgs;
