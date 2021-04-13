@@ -1,5 +1,6 @@
 package ru.tehsystem.demo.controller;
 
+import com.ibm.icu.text.Transliterator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
@@ -203,9 +204,13 @@ public class TaskController {
         a.mkdirs();
         doZip(downloadList, archiveName);
         response.setContentType(archiveName);
-        response.setHeader(
-                "Content-Disposition", "attachment; filename=" + taskRepo.findById(id).get().getName() + ".zip");
+        var CYRILLIC_TO_LATIN = "Cyrillic-Latin";
+        Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
+        String result = toLatinTrans.transliterate((taskRepo.findById(id).get().getName() + ".zip").replace(" ","_"));
         response.setHeader("Content-Transfer-Encoding", "binary");
+
+        response.setHeader(
+                "Content-Disposition", "attachment; filename=" + result);
         try {
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
             FileInputStream fis = new FileInputStream(archiveName);

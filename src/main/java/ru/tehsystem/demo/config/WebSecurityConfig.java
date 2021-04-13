@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return interceptor;
     }
 //     http.authorizeRequests()
-//             .antMatchers("/templates/**", "/static/**", "/registration", "/login", "/user").permitAll()
+//             .antMatchers("/templates/**", "/static/**", "/login", "/user").permitAll()
 //            .antMatchers("/**","/ordersCreate").authenticated()
 //            .antMatchers("/**").authenticated()
 //            .antMatchers("/**").authenticated()
