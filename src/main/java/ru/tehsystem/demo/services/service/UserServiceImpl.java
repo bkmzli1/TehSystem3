@@ -11,6 +11,7 @@ import ru.tehsystem.demo.domain.Img;
 import ru.tehsystem.demo.domain.Roles;
 import ru.tehsystem.demo.domain.User;
 import ru.tehsystem.demo.model.RoleServiceModel;
+import ru.tehsystem.demo.model.UserEditBindingModel;
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 import ru.tehsystem.demo.repo.ImgRepo;
 import ru.tehsystem.demo.repo.UserRepo;
@@ -52,6 +53,63 @@ public class UserServiceImpl implements UserService {
     public void create(UserRegisterBindingModel userServiceModel) {
         User userEntity = this.modelMapper.map(userServiceModel, User.class);
         userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
+        userEntity.setAccountNonExpired(true);
+        userEntity.setAccountNonLocked(true);
+        userEntity.setCredentialsNonExpired(true);
+        userEntity.setEnabled(true);
+        userEntity.setPs(userEntity.getPassword());
+        if (userServiceModel.getImg() == null) {
+            Img img = new Img();
+            img.setImg("static/user.png");
+            img.setName("userImg");
+            userEntity.setImg(img);
+
+            imgRepository.save(img);
+
+        }
+        if (userServiceModel.getImg() == null) {
+            Img imgFon = new Img();
+            imgFon.setImg("static/vk.png");
+            imgFon.setName("fon");
+            userEntity.setImgFon(imgFon);
+            imgRepository.save(imgFon);
+        }
+
+        Set<Roles> authorities = new HashSet<>();
+        RoleServiceModel roleServiceModel = null;
+
+        roleServiceModel = this.roleService.findByAuthority("USER");
+        Roles roles = this.modelMapper.map(roleServiceModel, Roles.class);
+
+        authorities.add(roles);
+
+        if (userServiceModel.isAdmin()) {
+            roleServiceModel = this.roleService.findByAuthority("ADMIN");
+            Roles rolesAdmin = this.modelMapper.map(roleServiceModel, Roles.class);
+
+            authorities.add(rolesAdmin);
+        }
+        if (userServiceModel.isExecutor()) {
+            roleServiceModel = this.roleService.findByAuthority("EXECUTOR");
+            Roles rolesExecutor = this.modelMapper.map(roleServiceModel, Roles.class);
+
+            authorities.add(rolesExecutor);
+        }
+
+
+        userEntity.setAuthorities(authorities);
+        this.userRepository.save(userEntity);
+    }
+
+    @Override
+    public void edit(UserEditBindingModel userServiceModel) {
+        User userEntity = this.modelMapper.map(userServiceModel, User.class);
+        if (!userServiceModel.isPassordof())
+            userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
+        else {
+            userEntity.setPassword(userRepository.findOneById(userServiceModel.getId()).getPassword());
+        }
+
         userEntity.setAccountNonExpired(true);
         userEntity.setAccountNonLocked(true);
         userEntity.setCredentialsNonExpired(true);

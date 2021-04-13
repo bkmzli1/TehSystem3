@@ -8,4 +8,5 @@ public interface TaskService {
     Task taskCrate(TaskCreate taskCreate, User user);
     Task taskFin(Task task, User user);
     Task taskFinCrate(Task task, User user, boolean fin);
+    Task taskDelete(Task task, User user);
 }

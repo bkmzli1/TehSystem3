@@ -13,6 +13,7 @@ public class IsUsernameTakenValidator implements ConstraintValidator<IsUsernameT
     @Autowired
     private UserService userService;
 
+
     @Override
     public void initialize(IsUsernameTaken isUsernameTaken) {
 

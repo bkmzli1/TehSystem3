@@ -46,6 +46,7 @@ public class Task {
 
     private boolean done =false;
     private boolean doneCrate =false;
+    private boolean deletes =false;
 
 
     public String getId() {
@@ -151,5 +152,13 @@ public class Task {
 
     public void setDoneCrate(boolean doneCrate) {
         this.doneCrate = doneCrate;
+    }
+
+    public boolean isDeletes() {
+        return deletes;
+    }
+
+    public void setDeletes(boolean deletes) {
+        this.deletes = deletes;
     }
 }

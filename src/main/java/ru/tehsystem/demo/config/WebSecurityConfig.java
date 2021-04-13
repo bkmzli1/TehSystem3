@@ -39,7 +39,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         interceptor.setParamName("lang");
         return interceptor;
     }
-
+//     http.authorizeRequests()
+//             .antMatchers("/templates/**", "/static/**", "/registration", "/login", "/user").permitAll()
+//            .antMatchers("/**","/ordersCreate").authenticated()
+//            .antMatchers("/**").authenticated()
+//            .antMatchers("/**").authenticated()
+//            .anyRequest()
+//            .authenticated()
+//            .and()
+//            .formLogin()
+//            .loginPage("/login")
+//            .permitAll()
+//            .and()
+//            .logout()
+//            .permitAll().and().csrf().disable().httpBasic();
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

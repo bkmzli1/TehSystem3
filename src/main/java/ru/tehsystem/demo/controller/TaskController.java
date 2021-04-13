@@ -93,6 +93,7 @@ public class TaskController {
             tasks.addAll(taskRepo.findAll());
 
             tasks.removeIf(Task::isDoneCrate);
+            tasks.removeIf(Task::isDeletes);
             return tasks;
         } else {
             List<Task> taskList = new ArrayList<>(taskRepo.findByCreator(user));
@@ -139,6 +140,7 @@ public class TaskController {
                 taskList.addAll(taskRepo.findByExecutor(userAllEx));
             Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
             tasks.removeIf(task -> !task.isDoneCrate());
+            tasks.removeIf(Task::isDeletes);
             tasks.addAll(taskList);
             return tasks;
         }
@@ -182,6 +184,13 @@ public class TaskController {
         return this.taskService.taskFinCrate(task, user, fin);
     }
 
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public Task taskDelete(Authentication authentication, @PathVariable String id) {
+//        User user = (User) authentication.getPrincipal();
+        Task task = taskRepo.findById(id).get();
+        return this.taskService.taskDelete(task, new User());
+    }
 
 
     @GetMapping("/download/{id}")

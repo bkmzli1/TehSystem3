@@ -51,7 +51,7 @@ public class TaskServiceImpl implements TaskService {
             });
         } catch (NullPointerException nullPointerException) {
         }
-
+        task.setDeletes(false);
         taskRepo.save(task);
         return task;
     }
@@ -67,15 +67,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override public Task taskFinCrate(Task task, User user, boolean fin) {
-        if (fin){
+        if (fin) {
             task.setDoneCrate(true);
 
-        }else {
+        } else {
             task.setDoneCrate(false);
             task.setPerformed(null);
             task.setDone(false);
         }
         taskRepo.save(task);
         return task;
+    }
+
+    @Override public Task taskDelete(Task task,User user) {
+
+        task.setDoneCrate(false);
+        task.setPerformed(null);
+        task.setDone(false);
+        task.setDeletes(true);
+        taskRepo.save(task);
+        return null;
     }
 }

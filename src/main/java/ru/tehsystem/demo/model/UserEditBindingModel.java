@@ -11,19 +11,19 @@ import javax.validation.constraints.Size;
 
 @EnableWebMvc
 @IsPasswordMatching()
-public class UserRegisterBindingModel {
+public class UserEditBindingModel {
+    @NotEmpty(message = "Не удалось получить ID пользователя(Серверная ошибка)")
+    private String id;
     @Size(min = 4, max = 20, message = "Имя пользователя должно быть от 4 до 20 символов")
-    @IsUsernameTaken
     @NotEmpty(message = "Укажите логин")
     private String username;
 
-    @Size(min = 4, max = 30, message = "Пароль должно быть от 4 до 30 символов")
+
 
     private String password;
     private String confirmPassword;
 
     @NotEmpty(message = "Укажите почту")
-    @Email(message = "Неправильная почта")
     private String email;
     private String telephone;
     private String img;
@@ -39,8 +39,7 @@ public class UserRegisterBindingModel {
     @NotEmpty(message = "Укажите ФИО")
     private String middleName;
     private String oldPassword;
-
-
+    private boolean passordof;
 
     public String getUsername() {
         return username;
@@ -146,7 +145,21 @@ public class UserRegisterBindingModel {
         this.telephone = telephone;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isPassordof() {
+        return passordof;
+    }
+
+    public void setPassordof(boolean passordof) {
+        this.passordof = passordof;
+    }
 }
 
 

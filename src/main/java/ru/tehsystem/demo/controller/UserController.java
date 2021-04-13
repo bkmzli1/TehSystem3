@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.model.UserEditBindingModel;
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 import ru.tehsystem.demo.repo.ImgRepo;
 import ru.tehsystem.demo.repo.UserRepo;
@@ -112,4 +113,26 @@ public class UserController {
         return user;
     }
 
+    @GetMapping("/allusers")
+    public Object allUsers() {
+        return userRepository.findAll();
+    }
+    @PostMapping("/edituserapi")
+    public Object allUsers(@RequestBody @Valid UserEditBindingModel userEditBindingModel,
+                           BindingResult bindingResult) {
+
+        Map<Object, Object> strings = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            Set<String> errors = new TreeSet<>();
+            bindingResult.getAllErrors().forEach(objectError -> errors.add(objectError.getDefaultMessage()));
+            strings.put("error", errors);
+            return strings;
+        } else {
+            UserEditBindingModel userServiceModel = this.modelMapper
+                    .map(userEditBindingModel, UserEditBindingModel.class);
+            this.userService.edit(userServiceModel);
+            strings.put("error", null);
+        }
+        return strings;
+    }
 }

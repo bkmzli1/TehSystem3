@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>7bc84b0d-1fea-4d7e-8156-da970503b303.SCHEMA:test.public</OriginalElement>
+  <nodes>
+    <node x="83.25" y="678.5">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users_roles</node>
+    <node x="394.5" y="0.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.img</node>
+    <node x="353.0" y="173.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users</node>
+    <node x="244.24999999999997" y="656.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages</node>
+    <node x="660.9649999999999" y="897.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_imgs</node>
+    <node x="282.93499999999995" y="897.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_massages</node>
+    <node x="416.75" y="590.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task</node>
+    <node x="41.5" y="316.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.role</node>
+    <node x="12.05499999999995" y="897.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages_imgs</node>
+    <node x="473.965" y="897.0">7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_executor</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages_imgs" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.img" relationship="REFERENCES">
+      <point x="-42.75" y="-39.0" />
+      <point x="54.80499999999995" y="876.0" />
+      <point x="31.0" y="876.0" />
+      <point x="31.0" y="148.0" />
+      <point x="461.0" y="148.0" />
+      <point x="0.0" y="61.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages_imgs" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages" relationship="REFERENCES">
+      <point x="42.75" y="-39.0" />
+      <point x="140.30499999999995" y="876.0" />
+      <point x="318.75" y="876.0" />
+      <point x="0.0" y="61.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_executor" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users" relationship="REFERENCES">
+      <point x="41.75" y="-39.0" />
+      <point x="599.2149999999999" y="866.0" />
+      <point x="606.935" y="866.0" />
+      <point x="606.935" y="564.0" />
+      <point x="461.0" y="564.0" />
+      <point x="0.0" y="182.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_imgs" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.img" relationship="REFERENCES">
+      <point x="35.75" y="-39.0" />
+      <point x="768.2149999999999" y="148.0" />
+      <point x="461.0" y="148.0" />
+      <point x="0.0" y="61.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.img" relationship="REFERENCES">
+      <point x="-54.0" y="-182.5" />
+      <point x="407.0" y="148.0" />
+      <point x="461.0" y="148.0" />
+      <point x="0.0" y="61.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_massages" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task" relationship="REFERENCES">
+      <point x="42.75" y="-39.0" />
+      <point x="411.18499999999995" y="876.0" />
+      <point x="505.25" y="876.0" />
+      <point x="0.0" y="127.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_executor" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task" relationship="REFERENCES">
+      <point x="-41.75" y="-39.0" />
+      <point x="515.7149999999999" y="876.0" />
+      <point x="505.25" y="876.0" />
+      <point x="0.0" y="127.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users_roles" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users" relationship="REFERENCES">
+      <point x="35.25" y="-39.0" />
+      <point x="189.0" y="564.0" />
+      <point x="461.0" y="564.0" />
+      <point x="0.0" y="182.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_massages" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages" relationship="REFERENCES">
+      <point x="-42.75" y="-39.0" />
+      <point x="325.68499999999995" y="876.0" />
+      <point x="318.75" y="876.0" />
+      <point x="0.0" y="61.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task_imgs" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task" relationship="REFERENCES">
+      <point x="-35.75" y="-39.0" />
+      <point x="696.7149999999999" y="876.0" />
+      <point x="505.25" y="876.0" />
+      <point x="0.0" y="127.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.task" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users" relationship="REFERENCES">
+      <point x="-44.25" y="-127.5" />
+      <point x="0.0" y="182.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users_roles" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.role" relationship="REFERENCES">
+      <point x="-35.25" y="-39.0" />
+      <point x="0.0" y="39.5" />
+    </edge>
+    <edge source="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.massages" target="7bc84b0d-1fea-4d7e-8156-da970503b303.TABLE:test.public.users" relationship="REFERENCES">
+      <point x="0.0" y="-61.5" />
+      <point x="318.75" y="564.0" />
+      <point x="461.0" y="564.0" />
+      <point x="0.0" y="182.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.1180904522613067" showDependencies="false" x="460.6493237720482" y="736.9615587649639" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

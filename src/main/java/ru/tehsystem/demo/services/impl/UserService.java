@@ -3,10 +3,12 @@ package ru.tehsystem.demo.services.impl;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.model.UserEditBindingModel;
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 
 public interface UserService extends UserDetailsService {
     void create(UserRegisterBindingModel userServiceModele);
+    void edit(UserEditBindingModel userServiceModele);
 
     void edit(User userServiceModele);
 
