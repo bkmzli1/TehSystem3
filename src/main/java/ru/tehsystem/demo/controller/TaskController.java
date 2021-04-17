@@ -105,8 +105,9 @@ public class TaskController {
             if (Ex.get())
                 taskList.addAll(taskRepo.findByExecutor(userAllEx));
             Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate).reversed());
-            tasks.removeIf(Task::isDoneCrate);
             tasks.addAll(taskList);
+            tasks.removeIf(task -> task.isDoneCrate());
+
             return tasks;
         }
     }
@@ -140,9 +141,10 @@ public class TaskController {
             if (Ex.get())
                 taskList.addAll(taskRepo.findByExecutor(userAllEx));
             Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
+            tasks.addAll(taskList);
             tasks.removeIf(task -> !task.isDoneCrate());
             tasks.removeIf(Task::isDeletes);
-            tasks.addAll(taskList);
+
             return tasks;
         }
     }
