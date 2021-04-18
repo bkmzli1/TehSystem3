@@ -1,9 +1,11 @@
 package ru.tehsystem.demo.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.tehsystem.demo.domain.Task;
 import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.domain.Views;
 import ru.tehsystem.demo.model.MassageModel;
 import ru.tehsystem.demo.repo.TaskRepo;
 import ru.tehsystem.demo.repo.UserRepo;
@@ -25,7 +27,7 @@ public class MassageController {
         this.userRepo = userRepo;
     }
 
-
+    @JsonView(Views.TaskAll.class)
     @PostMapping
     @ResponseBody
     public Task ms(@RequestBody() @Valid MassageModel massageModel, Authentication authentication) {

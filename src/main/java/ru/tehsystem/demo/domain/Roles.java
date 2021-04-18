@@ -1,6 +1,7 @@
 package ru.tehsystem.demo.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -15,8 +16,10 @@ public class Roles implements GrantedAuthority {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @JsonView(Views.Id.class)
     private String id;
     @Column(unique = true)
+    @JsonView(Views.UserBasic.class)
     private String authority;
 
 

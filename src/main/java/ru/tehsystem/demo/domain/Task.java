@@ -1,6 +1,9 @@
 package ru.tehsystem.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
 import ru.tehsystem.demo.domain.enums.Level;
 
@@ -21,32 +24,46 @@ public class Task {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @JsonView(Views.Id.class)
     private String id;
+    @JsonView(Views.TaskBasic.class)
     private Level level;
+    @JsonView(Views.TaskBasic.class)
     private String name;
 
 
     @Column(length = 1256)
+    @JsonView(Views.TaskAll.class)
     private String text;
+  
     @OneToMany(fetch = FetchType.EAGER)
+    @JsonView(Views.TaskAll.class)
     private Set<Img> imgs;
     @ManyToOne
+    @JsonView(Views.TaskBasic.class)
     private User creator;
-    @ManyToMany(fetch = FetchType.EAGER )
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonView(Views.TaskBasic.class)
     private Set<User> executor;
     @ManyToOne
+    @JsonView(Views.TaskBasic.class)
     private User performed;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonView(Views.TaskAll.class)
     private Set<Massages> massages;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonView(Views.TaskBasic.class)
     private LocalDateTime crate;
+    @JsonView(Views.TaskBasic.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime executed;
-
-    private boolean done =false;
-    private boolean doneCrate =false;
-    private boolean deletes =false;
+    @JsonView(Views.TaskBasic.class)
+    private boolean done = false;
+    @JsonView(Views.TaskBasic.class)
+    private boolean doneCrate = false;
+    @JsonView(Views.TaskBasic.class)
+    private boolean deletes = false;
 
 
     public String getId() {

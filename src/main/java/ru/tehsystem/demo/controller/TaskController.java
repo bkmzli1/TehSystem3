@@ -1,14 +1,12 @@
 package ru.tehsystem.demo.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.ibm.icu.text.Transliterator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.tehsystem.demo.domain.Img;
-import ru.tehsystem.demo.domain.Massages;
-import ru.tehsystem.demo.domain.Task;
-import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.domain.*;
 import ru.tehsystem.demo.model.TaskCreate;
 import ru.tehsystem.demo.repo.TaskRepo;
 import ru.tehsystem.demo.repo.UserRepo;
@@ -40,7 +38,7 @@ public class TaskController {
         this.taskRepo = taskRepo;
         this.userRepo = userRepo;
     }
-
+    @JsonView(Views.TaskAll.class)
     @PostMapping("/create")
     @ResponseBody
     public Object task(@RequestBody() @Valid TaskCreate taskCreate, BindingResult bindingResult,
@@ -60,7 +58,7 @@ public class TaskController {
         }
 
     }
-
+    @JsonView(Views.TaskAll.class)
     @PostMapping("/bin/ex/{id}")
     @ResponseBody
     public boolean ex(Authentication authentication, @PathVariable String id) {
@@ -73,9 +71,10 @@ public class TaskController {
         user.getAuthorities().forEach(roles -> b.set(roles.getAuthority().equals("ADMIN")));
         return b.get();
     }
-
+    @JsonView(Views.TaskAll.class)
     @GetMapping("/tasks")
     @ResponseBody
+
     public Set<Task> tasks(Authentication authentication) {
         User user;
         try {
@@ -111,6 +110,14 @@ public class TaskController {
             return tasks;
         }
     }
+    @JsonView(Views.TaskAll.class)
+    @PostMapping("/tasks")
+    @ResponseBody
+    public Set<Task> tasksUpdate(Authentication authentication) throws InterruptedException {
+        Thread.sleep(5000);
+        return tasks(authentication);
+    }
+    @JsonView(Views.TaskBasic.class)
     @GetMapping("/tasking")
     @ResponseBody
     public Set<Task> tasking(Authentication authentication) {
@@ -148,7 +155,7 @@ public class TaskController {
             return tasks;
         }
     }
-
+    @JsonView(Views.TaskBasic.class)
     @GetMapping("/tasks/my")
     @ResponseBody
     public Set<Task> tasksMy(Authentication authentication) {
@@ -161,6 +168,7 @@ public class TaskController {
 
     }
 
+    @JsonView(Views.TaskAll.class)
     @GetMapping("/get/{id}")
     @ResponseBody
     public Task task(@PathVariable String id) {
@@ -170,7 +178,20 @@ public class TaskController {
         task.setMassages(projects);
         return task;
     }
-
+    @JsonView(Views.TaskAll.class)
+    @PostMapping("/get/{id}")
+    @ResponseBody
+    public Task taskUpload(@PathVariable String id) throws InterruptedException {
+        System.out.println("sleep");
+        Thread.sleep(5000);
+        Task task = taskRepo.findById(id).get();
+        Set<Massages> projects = new TreeSet<>(Comparator.comparing(Massages::getDateTime));
+        projects.addAll(task.getMassages());
+        task.setMassages(projects);
+        System.out.println("sleepOut");
+        return task;
+    }
+    @JsonView(Views.TaskAll.class)
     @GetMapping("/bin/{id}")
     @ResponseBody
     public Task taskBin(Authentication authentication, @PathVariable String id) {
@@ -178,7 +199,7 @@ public class TaskController {
         Task task = taskRepo.findById(id).get();
         return this.taskService.taskFin(task, user);
     }
-
+    @JsonView(Views.TaskAll.class)
     @PostMapping("/binCrate/{id}")
     @ResponseBody
     public Task taskBinCrate(Authentication authentication, @PathVariable String id, @RequestBody boolean fin) {
@@ -186,11 +207,11 @@ public class TaskController {
         Task task = taskRepo.findById(id).get();
         return this.taskService.taskFinCrate(task, user, fin);
     }
-
+    @JsonView(Views.TaskAll.class)
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public Task taskDelete(Authentication authentication, @PathVariable String id) {
-//        User user = (User) authentication.getPrincipal();
+        //        User user = (User) authentication.getPrincipal();
         Task task = taskRepo.findById(id).get();
         return this.taskService.taskDelete(task, new User());
     }
@@ -208,7 +229,7 @@ public class TaskController {
         response.setContentType(archiveName);
         var CYRILLIC_TO_LATIN = "Cyrillic-Latin";
         Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
-        String result = toLatinTrans.transliterate((taskRepo.findById(id).get().getName() + ".zip").replace(" ","_"));
+        String result = toLatinTrans.transliterate((taskRepo.findById(id).get().getName() + ".zip").replace(" ", "_"));
         response.setHeader("Content-Transfer-Encoding", "binary");
 
         response.setHeader(

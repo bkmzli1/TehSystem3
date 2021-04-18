@@ -1,5 +1,6 @@
 package ru.tehsystem.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,13 +17,18 @@ public class Massages {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @JsonView(Views.Id.class)
     private String id;
+    @JsonView(Views.MassagesBasic.class)
     private LocalDateTime dateTime;
     @OneToOne
+    @JsonView(Views.MassagesBasic.class)
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER)
+    @JsonView(Views.MassagesBasic.class)
     private Set<Img> imgs;
+    @JsonView(Views.MassagesBasic.class)
     private String text;
 
     public String getId() {

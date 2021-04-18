@@ -1,11 +1,13 @@
 package ru.tehsystem.demo.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tehsystem.demo.domain.Img;
 import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.domain.Views;
 import ru.tehsystem.demo.domain.enums.ImgType;
 import ru.tehsystem.demo.repo.ImgRepo;
 import ru.tehsystem.demo.repo.UserRepo;
@@ -35,7 +37,7 @@ public class ImgController {
         this.imgService = imgService;
         this.userRepo = userRepo;
     }
-
+    @JsonView(Views.ImgBasic.class)
     @PostMapping(value = "/{type}")
     @ResponseBody
     public Object addImg(@RequestBody @Valid MultipartFile[] mfImg, @PathVariable String type, Authentication authentication) {

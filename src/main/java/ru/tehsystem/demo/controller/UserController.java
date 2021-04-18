@@ -1,6 +1,7 @@
 package ru.tehsystem.demo.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.tehsystem.demo.domain.User;
+import ru.tehsystem.demo.domain.Views;
 import ru.tehsystem.demo.model.UserEditBindingModel;
 import ru.tehsystem.demo.model.UserRegisterBindingModel;
 import ru.tehsystem.demo.repo.ImgRepo;
@@ -41,7 +43,7 @@ public class UserController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-
+    @JsonView(Views.UserAll.class)
     @PostMapping(value = "/reg")
     @ResponseBody
     public Map<Object, Object> registerConfirm(@RequestBody @Valid UserRegisterBindingModel userRegisterBindingModel,
@@ -63,6 +65,7 @@ public class UserController {
     }
 
     @GetMapping
+    @JsonView(Views.UserBasic.class)
     @RequestMapping("/user")
     public User user(Authentication authentication) {
         try {
@@ -74,14 +77,14 @@ public class UserController {
         return null;
 
     }
-
+    @JsonView(Views.UserAll.class)
     @GetMapping("/user/{id}")
     @ResponseBody
     public User userID(@PathVariable String id) {
         User user = userRepository.findOneById(id);
         return user;
     }
-
+    @JsonView(Views.UserAll.class)
     @PostMapping("/save")
     @ResponseBody
     public User userSave(@RequestBody() UserRegisterBindingModel userRegisterBindingModel,
@@ -99,7 +102,7 @@ public class UserController {
         }
         return user;
     }
-
+    @JsonView(Views.TaskAll.class)
     @GetMapping("/executor")
     public Set<User> userEx() {
         Set<User> users = new TreeSet<User>(Comparator.comparing(User::getUsername));
@@ -107,12 +110,12 @@ public class UserController {
         users.addAll(userByRole);
         return users;
     }
-
+    @JsonView(Views.TaskAll.class)
     @GetMapping("/usersss")
     public Object user(@AuthenticationPrincipal User user) {
         return user;
     }
-
+    @JsonView(Views.UserBasic.class)
     @GetMapping("/allusers")
     public Object allUsers() {
         return userRepository.findAll();

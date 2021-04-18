@@ -1,5 +1,6 @@
 package ru.tehsystem.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
 import ru.tehsystem.demo.domain.enums.ImgType;
 
@@ -18,9 +19,13 @@ public class Img {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @JsonView(Views.Id.class)
     private String id;
+    @JsonView(Views.ImgAll.class)
     private String name;
+    @JsonView(Views.ImgBasic.class)
     private String img;
+    @JsonView(Views.ImgAll.class)
     private ImgType imgType;
 
 
