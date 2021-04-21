@@ -62,7 +62,7 @@ public class TaskController {
     @PostMapping("/bin/ex/{id}")
     @ResponseBody
     public boolean ex(Authentication authentication, @PathVariable String id) {
-        User user = (User) authentication.getPrincipal();
+        User user = userRepo.findUserById(((User) authentication.getPrincipal()).getId());
         Task task = taskRepo.findById(id).get();
         if (user.equals(task.getExecutor())) {
             return true;
@@ -78,7 +78,7 @@ public class TaskController {
     public Set<Task> tasks(Authentication authentication) {
         User user;
         try {
-            user = (User) authentication.getPrincipal();
+            user = userRepo.findUserById(((User) authentication.getPrincipal()).getId());
         } catch (NullPointerException npe) {
             user = userRepo.findAll().get(0);
         }
@@ -123,7 +123,7 @@ public class TaskController {
     public Set<Task> tasking(Authentication authentication) {
         User user;
         try {
-            user = (User) authentication.getPrincipal();
+            user = userRepo.findUserById(((User) authentication.getPrincipal()).getId());
         } catch (NullPointerException npe) {
             user = userRepo.findAll().get(0);
         }
@@ -159,8 +159,7 @@ public class TaskController {
     @GetMapping("/tasks/my")
     @ResponseBody
     public Set<Task> tasksMy(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
-
+        User user = userRepo.findUserById(((User) authentication.getPrincipal()).getId());
         List<Task> taskList = new ArrayList<>(taskRepo.findByCreator(user));
         Set<Task> tasks = new TreeSet<>(Comparator.comparing(Task::getCrate));
         tasks.addAll(taskList);
@@ -178,7 +177,7 @@ public class TaskController {
         task.setMassages(projects);
         return task;
     }
-    @JsonView(Views.TaskAll.class)
+    @JsonView(Views.TaskUpdate.class)
     @PostMapping("/get/{id}")
     @ResponseBody
     public Task taskUpload(@PathVariable String id) throws InterruptedException {
@@ -195,7 +194,7 @@ public class TaskController {
     @GetMapping("/bin/{id}")
     @ResponseBody
     public Task taskBin(Authentication authentication, @PathVariable String id) {
-        User user = (User) authentication.getPrincipal();
+        User user = userRepo.findUserById(((User) authentication.getPrincipal()).getId());
         Task task = taskRepo.findById(id).get();
         return this.taskService.taskFin(task, user);
     }

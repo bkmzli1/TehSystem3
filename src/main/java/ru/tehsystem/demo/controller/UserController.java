@@ -70,7 +70,7 @@ public class UserController {
     @RequestMapping("/user")
     public User user(Authentication authentication) {
         try {
-            User user = (User) authentication.getPrincipal();
+            User user = userRepository.findUserById(((User) authentication.getPrincipal()).getId());
             return user;
         } catch (NullPointerException npe) {
 
@@ -91,7 +91,7 @@ public class UserController {
     @ResponseBody
     public User userSave(@RequestBody() UserRegisterBindingModel userRegisterBindingModel,
                          Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userRepository.findUserById(((User) authentication.getPrincipal()).getId());
         System.out
                 .println(bCryptPasswordEncoder.matches(userRegisterBindingModel.getOldPassword(), user.getPassword()));
         ;

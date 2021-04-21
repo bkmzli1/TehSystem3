@@ -1,9 +1,6 @@
 package ru.tehsystem.demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.GenericGenerator;
 import ru.tehsystem.demo.domain.enums.Level;
 
@@ -28,28 +25,30 @@ public class Task {
     private String id;
     @JsonView(Views.TaskBasic.class)
     private Level level;
-    @JsonView(Views.TaskBasic.class)
+    @JsonView({Views.TaskBasic.class, Views.NotificationsBasic.class})
     private String name;
 
 
     @Column(length = 1256)
     @JsonView(Views.TaskAll.class)
     private String text;
-  
+
     @OneToMany(fetch = FetchType.EAGER)
     @JsonView(Views.TaskAll.class)
     private Set<Img> imgs;
     @ManyToOne
-    @JsonView(Views.TaskBasic.class)
+    @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@creator")
+    @JsonView({Views.TaskBasic.class, Views.NotificationsBasic.class})
     private User creator;
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonView(Views.TaskBasic.class)
     private Set<User> executor;
     @ManyToOne
-    @JsonView(Views.TaskBasic.class)
+    @JsonView(Views.TaskUpdate.class)
     private User performed;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonView(Views.TaskAll.class)
+
+    @JsonView(Views.TaskUpdate.class)
     private Set<Massages> massages;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -58,11 +57,11 @@ public class Task {
     @JsonView(Views.TaskBasic.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime executed;
-    @JsonView(Views.TaskBasic.class)
+    @JsonView(Views.TaskUpdate.class)
     private boolean done = false;
-    @JsonView(Views.TaskBasic.class)
+    @JsonView(Views.TaskUpdate.class)
     private boolean doneCrate = false;
-    @JsonView(Views.TaskBasic.class)
+    @JsonView(Views.TaskUpdate.class)
     private boolean deletes = false;
 
 
