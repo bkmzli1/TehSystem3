@@ -10,7 +10,6 @@ class DemoApplicationTests {
     void Start() throws Exception {
 
             throw new Exception();
-
     }
 
 }
