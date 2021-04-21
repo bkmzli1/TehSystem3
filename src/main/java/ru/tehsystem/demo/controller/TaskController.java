@@ -227,8 +227,8 @@ public class TaskController {
         a.mkdirs();
         doZip(downloadList, archiveName);
         response.setContentType(archiveName);
-        var CYRILLIC_TO_LATIN = "Cyrillic-Latin";
-        Transliterator toLatinTrans = Transliterator.getInstance(CYRILLIC_TO_LATIN);
+    ;
+        Transliterator toLatinTrans = Transliterator.getInstance("Cyrillic-Latin");
         String result = toLatinTrans.transliterate((taskRepo.findById(id).get().getName() + ".zip").replace(" ", "_"));
         response.setHeader("Content-Transfer-Encoding", "binary");
 
