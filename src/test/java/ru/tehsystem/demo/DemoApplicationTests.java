@@ -7,8 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class DemoApplicationTests {
 
     @Test
-    void Start() {
+    void Start() throws Exception {
 
+            throw new Exception();
     }
 
 }
