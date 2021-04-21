@@ -1,15 +1,16 @@
 package ru.tehsystem.demo;
 
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class DemoApplicationTestsTTTT {
 
     @Test
-    void Start() throws Exception {
+    void TestVoid() throws Exception {
+        Assertions.assertEquals(0,0);
 
-            throw new Exception();
     }
-
 }

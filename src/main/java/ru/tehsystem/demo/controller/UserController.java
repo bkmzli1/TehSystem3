@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import ru.tehsystem.demo.domain.Notifications;
 import ru.tehsystem.demo.domain.User;
 import ru.tehsystem.demo.domain.Views;
 import ru.tehsystem.demo.model.UserEditBindingModel;
@@ -69,7 +70,7 @@ public class UserController {
     @RequestMapping("/user")
     public User user(Authentication authentication) {
         try {
-            User user = (User) authentication.getPrincipal();
+            User user = userRepository.findUserById(((User) authentication.getPrincipal()).getId());
             return user;
         } catch (NullPointerException npe) {
 
@@ -82,6 +83,7 @@ public class UserController {
     @ResponseBody
     public User userID(@PathVariable String id) {
         User user = userRepository.findOneById(id);
+        user.getNotifications().removeIf(Notifications::isClose);
         return user;
     }
     @JsonView(Views.UserAll.class)
@@ -89,7 +91,7 @@ public class UserController {
     @ResponseBody
     public User userSave(@RequestBody() UserRegisterBindingModel userRegisterBindingModel,
                          Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        User user = userRepository.findUserById(((User) authentication.getPrincipal()).getId());
         System.out
                 .println(bCryptPasswordEncoder.matches(userRegisterBindingModel.getOldPassword(), user.getPassword()));
         ;

@@ -18,9 +18,10 @@ public final class Views {
     public interface ImgAll extends ImgBasic {}
 
     //Task
-    public interface TaskBasic extends UserBasic {}
+    public interface TaskBasic extends UserBasic,TaskUpdate {}
 
     public interface TaskAll extends TaskBasic, UserBasic, ImgAll, MassagesBasic {}
+    public interface TaskUpdate extends  UserBasic, ImgAll, MassagesBasic {}
 
     //Massages
     public interface MassagesBasic extends Id, ImgBasic {}

@@ -44,7 +44,7 @@ public class ImgController {
         File fileUploadPath = new File(uploadPath);
         User user = null;
         try {
-            user = (User) authentication.getPrincipal();
+            user = userRepo.findUserById(((User) authentication.getPrincipal()).getId());
         } catch (NullPointerException nullPointerException) {
         }
 
